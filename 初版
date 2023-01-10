@@ -1,0 +1,129 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Binary {
+
+	public:
+		int a; 	//运算数1
+		int op1; //运算符1
+		char opc1;
+		int b;	//运算数2
+		int op2;	//运算符
+		char opc2;
+		int c;	//运算数3
+		int r;	//正确结果
+
+		Binary(int x, int o, int y, int o2, int z) { //构造函数
+			a = x;
+			b = y;
+			op1 = o;
+			op2 = o2;
+			c = z;
+			r = getResult(a, op1, b, op2, c);	//生成结果
+		}
+		int getResult(int x, int o, int y, int o2, int z) {
+			int midr;
+			switch (o) { //确定运算符
+				case 0:
+					opc1 = '+';
+					midr = x + y;
+					break;
+				case 1:
+					opc1 = '-';
+					midr = x - y;
+					break;
+				case 2:
+					opc1 = '*';
+					midr = x * y;
+					break;
+				case 3:
+					opc1 = '/';
+					midr = x / y;
+					break;
+				default:
+					cout << "有误！";
+					break;
+			}
+			switch (o2) { //确定运算符
+				case 0:
+					opc2 = '+';
+					midr += z;
+					break;
+				case 1:
+					opc2 = '-';
+					midr -= z;
+					break;
+				case 2:
+					opc2 = '*';
+					midr *= z;
+					break;
+				case 3:
+					opc2 = '/';
+					midr /= z;
+					break;
+				default:
+					cout << "有误！";
+					break;
+			}
+			return midr;
+		}
+
+		void toString() {
+			cout << a << " " << opc1 << " " << b << " " << opc2 << " " << c << " =" << endl;
+		}
+};
+vector<Binary> vec;
+
+
+int getRand(int start, int end) { //返回start到end之间的随机数
+	return rand() % (end - start + 1) + start;
+}
+
+void Test(int n) { //生成测试
+	int a = 0;
+	int b = 0;
+	int c = 0;
+	int i = 0;
+	int op1, op2;
+	for (i = 0; i < n; i++) { //n题
+		a = getRand(0, 99); //生成一个0~99之间的随机数
+		b = getRand(0, 99); //生成一个0~99之间的随机数
+		c = getRand(0, 99);
+		op1 = getRand(0, 3);
+		op2 = getRand(0, 3);
+		if (op1 == 3 && b == 0) { //除数不能为0
+			i--;
+			continue;
+		}
+		if (op2 == 3 && c == 0) { //除数不能为0
+			i--;
+			continue;
+		}
+		Binary bi(a, op1, b, op2, c);
+		if (bi.r > 100 || bi.r < 0) { //结果介于0-100之间
+			i--;
+			continue;
+		}
+		vec.push_back(bi);
+
+	}
+	int cnt = 1;
+	for (auto i : vec) {	//打印题目
+		cout << "第" << cnt++ << "题	";
+		i.toString();
+//		cout << i.r << endl;
+	}
+}
+
+void init() { //初始化
+	int n = 300;
+	srand((unsigned)time( NULL ) ); //初始化随机数发生器，使得每次运行生成的随机数不同
+	Test(n);
+}
+
+int main() {
+	init(); //初始化
+	return 0;
+}
+
